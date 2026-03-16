@@ -15,7 +15,7 @@ class KeyValueStore:
         for i in range(len(self.index)):
             if self.index[i].key == key:
                 return i
-            return -1
+        return -1
     
     # Append a key-value pair to the disk file. This is used to persist changes to the store.
     def append_disk(self, key, value):
