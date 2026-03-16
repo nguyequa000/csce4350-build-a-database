@@ -37,7 +37,24 @@ class KeyValueStore:
         if idx == -1:
             return None
         return self.index[idx].value
-            
+    
+    # Save the current state of the store to disk. This is used to persist the store across sessions.
+    def load_from_disk(self, filename):
+        if not os.path.exists(self.filename):
+            return
+
+        with open(self.filename, "r", encoding="utf-8") as file:
+            for line in file:
+                line = line.rstrip("\n")
+                parts = line.split("\t", 2)
+
+                if len(parts) != 3:
+                    continue
+
+                command, key, value = parts
+
+                if command == "SET":
+                    self.set_memory(key, value)
             
 def run_cli():
     store = KeyValueStore()
