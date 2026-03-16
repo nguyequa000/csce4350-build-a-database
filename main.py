@@ -65,6 +65,7 @@ class KeyValueStore:
                     self.set_memory(key, value)
 
 
+# Command-line interface for the key-value store. This allows users to interact with the store using simple commands.
 def run_cli():
     store = KeyValueStore()
 
