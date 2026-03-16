@@ -16,6 +16,12 @@ class KeyValueStore:
             if self.index[i].key == key:
                 return i
             return -1
+    
+    # Append a key-value pair to the disk file. This is used to persist changes to the store.
+    def append_disk(self, key, value):
+        with open(self.filename, "a", encoding="utf-8") as file:
+            file.write(f"SET\t{key}\t{value}\n")
+            file.flush()
      
     # Set a key-value pair in the store. If the key already exists, update its value.    
     def set (self, key, value):
@@ -34,27 +40,41 @@ class KeyValueStore:
             
             
 def run_cli():
+    store = KeyValueStore()
+
     while True:
-        try: 
-            command = input().strip() # Read user input and remove leading/trailing whitespace
+        try:
+            command = input().strip()
         except EOFError:
             break
-        if command == "exit":
+
+        if command == "EXIT":
             break
-        
-        if command.startswith("SET"):
-            parts = command.split()
-            if len(parts) == 3:
-                print("OK")
-            else:
+
+        if command.startswith("SET "):
+            parts = command.split(" ", 2)
+            if len(parts) != 3:
                 print("ERROR")
-        
-        elif command.startswith("GET"):
-            parts = command.split(" ", 1) # Split into at most 2 parts
-            if len(parts) == 2:
-                print("NULL")
-            else:
+                continue
+
+            _, key, value = parts
+            store.set(key, value)
+            print("OK")
+
+        elif command.startswith("GET "):
+            parts = command.split(" ", 1)
+            if len(parts) != 2:
                 print("ERROR")
+                continue
+
+            _, key = parts
+            value = store.get(key)
+
+            if value is None:
+                print("NOT FOUND")
+            else:
+                print(value)
+
         else:
             print("ERROR")
 
