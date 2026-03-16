@@ -1,3 +1,6 @@
+import os
+
+
 class Entry:
     def __init__(self, key, value):
         self.key = key
@@ -21,6 +24,13 @@ class KeyValueStore:
             self.index.append(Entry(key, value))
         else:
             self.index[idx].value = value
+    
+    # Get the value associated with a key. Return None if the key is not found.
+    def get(self, key):
+        idx = self.find_key(key)
+        if idx == -1:
+            return None
+        return self.index[idx].value
             
             
 def run_cli():
