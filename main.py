@@ -1,3 +1,28 @@
+class Entry:
+    def __init__(self, key, value):
+        self.key = key
+        self.value = value
+
+class KeyValueStore:
+    def __init__(self):
+        self.index = {}
+
+    # Find the index of a key in the store. Return -1 if the key is not found.
+    def find_key(self, key):
+        for i in range(len(self.index)):
+            if self.index[i].key == key:
+                return i
+            return -1
+     
+    # Set a key-value pair in the store. If the key already exists, update its value.    
+    def set (self, key, value):
+        idx = self.find_key(key)
+        if idx == -1:
+            self.index.append(Entry(key, value))
+        else:
+            self.index[idx].value = value
+            
+            
 def run_cli():
     while True:
         try: 
